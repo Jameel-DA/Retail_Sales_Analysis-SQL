@@ -1,5 +1,5 @@
 -- SQL Retail Sales Analysis 
-CREATE DATABASE sql_project_p2;
+CREATE DATABASE retail_db;
 
 
 -- Create TABLE
@@ -172,10 +172,10 @@ SELECT
 FROM 
 (    
 SELECT 
-    EXTRACT(YEAR FROM sale_date) as year,
-    EXTRACT(MONTH FROM sale_date) as month,
+    YEAR (sale_date) as year,
+    MONTH (sale_date) as month,
     AVG(total_sale) as avg_sale,
-    RANK() OVER(PARTITION BY EXTRACT(YEAR FROM sale_date) ORDER BY AVG(total_sale) DESC) as rank
+    RANK() OVER(PARTITION BY YEAR (sale_date) ORDER BY AVG(total_sale) DESC) as rank
 FROM retail_sales
 GROUP BY 1, 2
 ) as t1
@@ -211,8 +211,8 @@ AS
 (
 SELECT *,
     CASE
-        WHEN EXTRACT(HOUR FROM sale_time) < 12 THEN 'Morning'
-        WHEN EXTRACT(HOUR FROM sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+        WHEN HOUR (sale_time) < 12 THEN 'Morning'
+        WHEN HOUR (sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
         ELSE 'Evening'
     END as shift
 FROM retail_sales
